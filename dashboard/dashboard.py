@@ -60,7 +60,7 @@ def rmf(df, df2, mak, order):
 
 def plot_rmf(df):
     fig, ax = plt.subplots(nrows=1, ncols=3, figsize=(30, 8))
-    colors_ = ["#72BCD4"] + ["#D3D3D3"] * (len(df) - 1)
+    colors_ = ["#72BCD4"] + ["#D3D3D3"] + ["#D3D3D3"] + ["#D3D3D3"] + ["#D3D3D3"]))
     sns.barplot(y="recency", x="customer_id", hue="customer_id", data=df.sort_values(by="recency", ascending=False).head(5), palette=colors_, ax=ax[0])
     ax[0].set_ylabel(None)
     ax[0].set_xlabel("customer_id", fontsize=30)
@@ -176,7 +176,7 @@ def cluster(df, cust):
 # Fungsi untuk plot
 def bar_chart(df):
     fig, ax = plt.subplots(figsize=(25, 15))
-    colors_ = ["#72BCD4"] + ["#D3D3D3"] * (len(df) - 1)
+    colors_ = ["#72BCD4"] + ["#D3D3D3"] + ["#D3D3D3"] + ["#D3D3D3"] + ["#D3D3D3"])
     sns.barplot(x=df.values, y=df.index, hue=df.values, palette=colors_, dodge=False)
     ax.set_xlabel(None)
     ax.set_ylabel(None)
