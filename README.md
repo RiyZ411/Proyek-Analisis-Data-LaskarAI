@@ -25,13 +25,12 @@ streamlit run dashboard.py
 ```
 
 ## Langkah-langkah pembuatan proyek
-```
 - Pembuatan virtual environment di conda 
 - Install Library yg dibutuhkan ke virtual environment
 - Pembuatan folder & file sesuai persyaratan/template
 - Push ke repository GitHub
 - Hubungkan streamlit cloud dengan repository proyek GitHub
 - Deployment ke streamlit cloud
-```
+
 
 
