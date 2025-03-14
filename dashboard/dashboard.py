@@ -23,7 +23,7 @@ def bottom_kategori_produk(df, kolom):
 
 def order_dan_revenue(df, time):
     df_2017 = df_merged_selling[df_merged_selling[f'{time}'].dt.year == 2017]
-    monthly_orders_df = df_2017.resample(rule='M', on='order_purchase_timestamp').agg({
+    monthly_orders_df = df_2017.resample(rule='ME', on='order_purchase_timestamp').agg({
         "order_id": "nunique",
         "price": "sum"
     })
@@ -174,9 +174,9 @@ def cluster(df, cust):
     return df
 
 # Fungsi untuk plot
-def bar_chart(df):
+def bar_chart(df, banyak):
     fig, ax = plt.subplots(figsize=(25, 15))
-    colors_ = ["#72BCD4"] + ["#D3D3D3"] * 4
+    colors_ = ["#72BCD4"] * banyak
     sns.barplot(x=df.values, y=df.index, hue=df.values, palette=colors_, dodge=False)
     ax.set_xlabel(None)
     ax.set_ylabel(None)
@@ -258,34 +258,34 @@ st.header('Dicoding Collection Dashboard :sparkles:')
 st.write("")
 st.subheader("Demografi Customer")
 st.write("Berdasarkan Negara Bagian")
-state = bar_chart(state)
+state = bar_chart(state, 5)
 st.pyplot(state)
 
 st.write("")
 st.write("Berdasarkan Kota")
-city = bar_chart(city)
+city = bar_chart(city, 5)
 st.pyplot(city)
 
 st.write("")
 st.subheader("Kategori Produk Paling Banyak dan Paling Sedikit Terjual")
 st.write("Kategori Produk Yang Banyak Terjual")
-top_kategori = bar_chart(top_kategori)
+top_kategori = bar_chart(top_kategori, 5)
 st.pyplot(top_kategori)
 
 st.write("")
 st.write("Kategori Produk Yang Sedikit Terjual")
-bottom_kategori = bar_chart(bottom_kategori)
+bottom_kategori = bar_chart(bottom_kategori, 5)
 st.pyplot(bottom_kategori)
 
 st.write("")
 st.subheader("Produk Paling Banyak dan Paling Sedikit Terjual")
 st.write("Produk Yang Banyak Terjual")
-top_produk = bar_chart(top_produk)
+top_produk = bar_chart(top_produk, 5)
 st.pyplot(top_produk)
 
 st.write("")
 st.write("Produk Yang Sedikit Terjual")
-bottom_produk = bar_chart(bottom_produk)
+bottom_produk = bar_chart(bottom_produk, 5)
 st.pyplot(bottom_produk)
 
 st.write("")
@@ -303,27 +303,27 @@ st.pyplot(order_revenue)
 
 st.write("")
 st.subheader("Type Pembayaran Yang Paling Banyak Digunakan Customer")
-payment = bar_chart(payment)
+payment = bar_chart(payment, 5)
 st.pyplot(payment)
 
 st.write("")
 st.subheader("Seller Yang Mendapatkan Skor Review 5 paling banyak dan paling sedikit")
 st.write("Top Seller")
-seller_top = bar_chart(seller_top)
+seller_top = bar_chart(seller_top, 5)
 st.pyplot(seller_top)
 
 st.write("Bottom Seller")
-seller_nontop = bar_chart(seller_nontop)
+seller_nontop = bar_chart(seller_nontop, 5)
 st.pyplot(seller_nontop)
 
 st.write("")
 st.subheader("Seller Yang Memilki Jumlah Skor Review 1 Lebih Banyak Dibanding 5")
-seller_red = bar_chart(seller_red)
+seller_red = bar_chart(seller_red, 5)
 st.pyplot(seller_red)
 
 st.write("")
 st.subheader("Status Order")
-status = bar_chart(status)
+status = bar_chart(status, 2)
 st.pyplot(status)
 
 st.write("")
@@ -345,7 +345,7 @@ rmf = plot_rmf(rmf)
 st.pyplot(rmf)
 
 st.write("Cluster Customer Berdasarkan RFM Parameters")
-klaster_rmf = bar_chart(klaster_rmf)
+klaster_rmf = bar_chart(klaster_rmf, 5)
 st.pyplot(klaster_rmf)
 
 st.write("")
@@ -365,5 +365,5 @@ st.pyplot(sao)
 
 st.write("")
 st.subheader("Clustering Customer")
-klaster = bar_chart(klaster)
+klaster = bar_chart(klaster, 4)
 st.pyplot(klaster)
