@@ -6,7 +6,10 @@ import geobr
 import pkg_resources
 import streamlit as st
 from babel.numbers import format_currency
+import os
 sns.set(style='dark')
+
+os.environ['STREAMLIT_SERVER_PORT'] = '8502'
 
 
 def demografi_dan_typepayment_dan_statusorder(df, kolom):
