@@ -61,19 +61,19 @@ def rmf(df, df2, mak, order):
 def plot_rmf(df):
     fig, ax = plt.subplots(nrows=1, ncols=3, figsize=(30, 8))
     colors_ = ["#72BCD4"] + ["#D3D3D3"] * (len(df) - 1)
-    sns.barplot(y="recency", x="customer_id", data=df.sort_values(by="recency", ascending=False).head(5), palette=colors_, ax=ax[0])
+    sns.barplot(y="recency", x="customer_id", hue="customer_id", data=df.sort_values(by="recency", ascending=False).head(5), palette=colors_, ax=ax[0])
     ax[0].set_ylabel(None)
     ax[0].set_xlabel("customer_id", fontsize=30)
     ax[0].set_title("By Recency (days)", loc="center", fontsize=45)
     ax[0].tick_params(axis ='x', labelsize=15, rotation=90)
 
-    sns.barplot(y="frequency", x="customer_id", data=df.sort_values(by="frequency", ascending=False).head(5), palette=colors_, ax=ax[1])
+    sns.barplot(y="frequency", x="customer_id", hue="customer_id", data=df.sort_values(by="frequency", ascending=False).head(5), palette=colors_, ax=ax[1])
     ax[1].set_ylabel(None)
     ax[1].set_xlabel("customer_id", fontsize=30)
     ax[1].set_title("By Frequency", loc="center", fontsize=45)
     ax[1].tick_params(axis ='x', labelsize=15, rotation=90)
 
-    sns.barplot(y="monetary", x="customer_id", data=df.sort_values(by="monetary", ascending=False).head(5), palette=colors_, ax=ax[2])
+    sns.barplot(y="monetary", x="customer_id", hue="customer_id", data=df.sort_values(by="monetary", ascending=False).head(5), palette=colors_, ax=ax[2])
     ax[2].set_ylabel(None)
     ax[2].set_xlabel("customer_id", fontsize=30)
     ax[2].set_title("By Monetary", loc="center", fontsize=45)
