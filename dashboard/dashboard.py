@@ -177,7 +177,7 @@ def cluster(df, cust):
 def bar_chart(df):
     fig, ax = plt.subplots(figsize=(25, 15))
     colors_ = ["#72BCD4"] + ["#D3D3D3"] * (len(df) - 1)
-    sns.barplot(x=df.values, y=df.index, palette=colors_, dodge=False)
+    sns.barplot(x=df.values, y=df.index, hue=df.values, palette=colors_, dodge=False)
     ax.set_xlabel(None)
     ax.set_ylabel(None)
     ax.tick_params(axis='x', labelsize=30)
