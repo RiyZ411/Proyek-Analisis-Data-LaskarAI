@@ -365,5 +365,5 @@ st.pyplot(sao)
 
 st.write("")
 st.subheader("Clustering Customer")
-klaster = bar_chart(klaster, 4)
+klaster = bar_chart(klaster, 5)
 st.pyplot(klaster)
