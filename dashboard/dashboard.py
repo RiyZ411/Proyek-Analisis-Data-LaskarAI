@@ -60,7 +60,7 @@ def rmf(df, df2, mak, order):
 
 def plot_rmf(df):
     fig, ax = plt.subplots(nrows=1, ncols=3, figsize=(30, 8))
-    colors_ = ["#72BCD4"] + ["#D3D3D3"] * 4
+    colors_ = ["#72BCD4"] * 5
     sns.barplot(y="recency", x="customer_id", hue="customer_id", data=df.sort_values(by="recency", ascending=False).head(5), palette=colors_, ax=ax[0])
     ax[0].set_ylabel(None)
     ax[0].set_xlabel("customer_id", fontsize=30)
