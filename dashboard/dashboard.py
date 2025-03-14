@@ -197,19 +197,19 @@ def line_chart(df, time, count):
     ax.tick_params(axis='x', labelsize=30, rotation=45)
     return fig
 
-df_customers_dataset = pd.read_pickle('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/df_customers_dataset.pkl')
-df_geolocation_dataset = pd.read_pickle('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/df_geolocation_dataset.pkl')
-df_merged_category = pd.read_pickle('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/df_merged_category.pkl')
-df_merged_seller = pd.read_pickle('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/df_merged_seller.pkl')
-df_merged_selling = pd.read_pickle('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/df_merged_selling.pkl')
-df_order_items_dataset = pd.read_pickle('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/df_order_items_dataset.pkl')
-df_order_payments_dataset = pd.read_pickle('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/df_order_payments_dataset.pkl')
-df_order_review_dataset = pd.read_pickle('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/df_order_reviews_dataset.pkl')
-df_orders_dataset = pd.read_pickle('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/df_orders_dataset.pkl')
-df_product_category_name_translation = pd.read_pickle('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/df_product_category_name_translation.pkl')
-df_products_dataset = pd.read_pickle('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/df_products_dataset.pkl')
-df_sellers_dataset = pd.read_pickle('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/df_sellers_dataset.pkl')
-rmf_df = pd.read_pickle('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/rfm_df.pkl')
+df_customers_dataset = pd.read_pickle('dashboard/Data Clean/df_customers_dataset.pkl')
+df_geolocation_dataset = pd.read_pickle('dashboard/Data Clean/df_geolocation_dataset.pkl')
+df_merged_category = pd.read_pickle('dashboard/Data Clean/df_merged_category.pkl')
+df_merged_seller = pd.read_pickle('dashboard/Data Clean/df_merged_seller.pkl')
+df_merged_selling = pd.read_pickle('dashboard/Data Clean/df_merged_selling.pkl')
+df_order_items_dataset = pd.read_pickle('dashboard/Data Clean/df_order_items_dataset.pkl')
+df_order_payments_dataset = pd.read_pickle('dashboard/Data Clean/df_order_payments_dataset.pkl')
+df_order_review_dataset = pd.read_pickle('dashboard/Data Clean/df_order_reviews_dataset.pkl')
+df_orders_dataset = pd.read_pickle('dashboard/Data Clean/df_orders_dataset.pkl')
+df_product_category_name_translation = pd.read_pickle('dashboard/Data Clean/df_product_category_name_translation.pkl')
+df_products_dataset = pd.read_pickle('dashboard/Data Clean/df_products_dataset.pkl')
+df_sellers_dataset = pd.read_pickle('dashboard/Data Clean/df_sellers_dataset.pkl')
+rmf_df = pd.read_pickle('dashboard/Data Clean/rfm_df.pkl')
 
 
 # Pertanyaan 1
