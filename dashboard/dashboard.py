@@ -29,8 +29,7 @@ def bottom_kategori_produk(df, kolom):
     return df
 
 def order_dan_revenue(df, time):
-    df_2017 = df_all[df_all[f'{time}'].dt.year == 2017]
-    monthly_orders_df = df_2017.resample(rule='M', on='order_purchase_timestamp').agg({
+    monthly_orders_df = df.resample(rule='ME', on=f'{time}').agg({
         "order_id": "nunique",
         "price": "sum"
     })
@@ -41,22 +40,6 @@ def order_dan_revenue(df, time):
         "price": "revenue"
     }, inplace=True)
     return monthly_orders_df
-
-def seller_5(df, seller, kolom):
-    penjual_bintang_5 = df[df[f'{kolom}'] == 5]
-    jumlah_bintang_5_per_penjual = penjual_bintang_5[f'{seller}'].value_counts().head(5)
-    return jumlah_bintang_5_per_penjual
-
-def seller_k5(df, seller, kolom):
-    penjual_bintang_5 = df[df[f'{kolom}'] == 5]
-    jumlah_bintang_5_per_penjual = penjual_bintang_5[f'{seller}'].value_counts().tail(5)
-    return jumlah_bintang_5_per_penjual
-
-def seller_redflag(df, seller, kolom):
-    penjual_rating_1 = df[df[f'{kolom}'] == 1]
-    penjual_dengan_rating_1_lebih_dari_5 = penjual_rating_1[f'{seller}'].value_counts()
-    penjual_dengan_rating_1_lebih_dari_5 = penjual_dengan_rating_1_lebih_dari_5[penjual_dengan_rating_1_lebih_dari_5 > 5].head(5)
-    return penjual_dengan_rating_1_lebih_dari_5
 
 def rmf(df, df2, mak, order):
     df[f'{mak}'] = df[f'{mak}'].dt.date
@@ -154,7 +137,7 @@ def geo_city(df, city):
     all_city = all_city.merge(df_cities, how="left", left_on="name_muni", right_on="customer_city")
     return all_city
 
-def geo_sao(df, col):
+def sao(df, col):
     cities = df[f'{col}'].value_counts().reset_index()
     cities.columns = ['customer_city', 'customer_count']
 
@@ -204,7 +187,7 @@ def line_chart(df, time, count):
     ax.tick_params(axis='x', labelsize=30, rotation=45)
     return fig
 
-df_all = dataset('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/df_all.pkl')
+df_all = dataset('https://github.com/RiyZ411/Proyek-Analisis-Data-LaskarAi/raw/refs/heads/main/dashboard/Data%20Clean/df_all.pkl')
 rmf_df = dataset('https://github.com/RiyZ411/Proyek-Analisis-Data-LaskarAi/raw/refs/heads/main/dashboard/Data%20Clean/rfm_df.pkl')
 
 
@@ -225,9 +208,6 @@ with st.sidebar:
 df_all = df_all[(df_all["order_purchase_timestamp"] >= str(start_date)) & 
                 (df_all["order_purchase_timestamp"] <= str(end_date))]
 
-# Pertanyaan 4
-order_revenue = order_dan_revenue(df_all, 'order_purchase_timestamp')
-
 # Pertanyaan 1
 state = demografi_dan_typepayment_dan_statusorder(df_all, 'customer_state')
 city = demografi_dan_typepayment_dan_statusorder(df_all, 'customer_city')
@@ -239,6 +219,9 @@ bottom_kategori = bottom_kategori_produk(df_all, 'product_category_name')
 # Pertanyaan 3
 top_produk = top_kategori_produk(df_all, 'product_id')
 bottom_produk = bottom_kategori_produk (df_all, 'product_id')
+
+# Pertanyaan 4
+order_revenue = order_dan_revenue(df_all, 'order_purchase_timestamp')
 
 # Pertanyaan 5
 payment = demografi_dan_typepayment_dan_statusorder(df_all,'payment_type')
@@ -254,7 +237,7 @@ klaster_rmf = cluster_rmf(rmf, 'recency', 'frequency', 'monetary')
 # Geospatial
 states = geo_state(df_all, 'customer_state')
 cities = geo_city(df_all, 'customer_city')
-sao = geo_sao(df_all, 'customer_city')
+saop = sao(df_all, 'customer_city')
 
 #cluster
 klaster = cluster(df_all, 'customer_id')
@@ -295,7 +278,7 @@ bottom_produk = bar_chart(bottom_produk)
 st.pyplot(bottom_produk)
 
 st.write("")
-st.subheader('Order Bulanan Pada 2017')
+st.subheader('Monthly Orders')
 col1, col2 = st.columns(2)
 with col1:
     total_orders = order_revenue.order_count.sum()
@@ -340,18 +323,18 @@ klaster_rmf = bar_chart(klaster_rmf)
 st.pyplot(klaster_rmf)
 
 st.write("")
-st.subheader("Geospasial Negara Bagian")
+st.subheader("Geospasial Negara Bagian di Brasil")
 states = plot_geo(states)
 st.pyplot(states)
 
 st.write("")
-st.subheader("Geospasial Kota")
+st.subheader("Geospasial Kota di Brasil")
 cities = plot_geo(cities)
 st.pyplot(cities)
 
 st.write("")
-st.subheader("Geospasial Pada Negara Bagian Sao Paulo")
-sao = plot_geo(sao)
+st.subheader("Geospasial Negara Bagian Sao Paulo")
+sao = plot_geo(saop)
 st.pyplot(sao)
 
 st.write("")
