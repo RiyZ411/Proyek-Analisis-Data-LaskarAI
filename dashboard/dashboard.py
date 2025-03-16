@@ -6,8 +6,15 @@ import geobr
 import pkg_resources
 import streamlit as st
 from babel.numbers import format_currency
+import requests
+import pickle
 sns.set(style='dark')
 
+def dataset(url):
+    response = requests.get(url)
+    response.raise_for_status()  
+    df = pickle.loads(response.content)
+    return df
 
 def demografi_dan_typepayment_dan_statusorder(df, kolom):
     df = df[f'{kolom}'].value_counts().head(5)
@@ -22,7 +29,7 @@ def bottom_kategori_produk(df, kolom):
     return df
 
 def order_dan_revenue(df, time):
-    df_2017 = df_merged_selling[df_merged_selling[f'{time}'].dt.year == 2017]
+    df_2017 = df_all[df_all[f'{time}'].dt.year == 2017]
     monthly_orders_df = df_2017.resample(rule='M', on='order_purchase_timestamp').agg({
         "order_id": "nunique",
         "price": "sum"
@@ -197,61 +204,60 @@ def line_chart(df, time, count):
     ax.tick_params(axis='x', labelsize=30, rotation=45)
     return fig
 
-df_customers_dataset = pd.read_pickle('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/df_customers_dataset.pkl')
-df_geolocation_dataset = pd.read_pickle('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/df_geolocation_dataset.pkl')
-df_merged_category = pd.read_pickle('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/df_merged_category.pkl')
-df_merged_seller = pd.read_pickle('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/df_merged_seller.pkl')
-df_merged_selling = pd.read_pickle('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/df_merged_selling.pkl')
-df_order_items_dataset = pd.read_pickle('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/df_order_items_dataset.pkl')
-df_order_payments_dataset = pd.read_pickle('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/df_order_payments_dataset.pkl')
-df_order_review_dataset = pd.read_pickle('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/df_order_reviews_dataset.pkl')
-df_orders_dataset = pd.read_pickle('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/df_orders_dataset.pkl')
-df_product_category_name_translation = pd.read_pickle('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/df_product_category_name_translation.pkl')
-df_products_dataset = pd.read_pickle('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/df_products_dataset.pkl')
-df_sellers_dataset = pd.read_pickle('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/df_sellers_dataset.pkl')
-rmf_df = pd.read_pickle('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/rfm_df.pkl')
+df_all = dataset('/home/riyan/LaskarAi/Belajar Data Analisis Dengan Python/submission/dashboard/Data Clean/df_all.pkl')
+rmf_df = dataset('https://github.com/RiyZ411/Proyek-Analisis-Data-LaskarAi/raw/refs/heads/main/dashboard/Data%20Clean/rfm_df.pkl')
 
 
-# Pertanyaan 1
-state = demografi_dan_typepayment_dan_statusorder(df_customers_dataset, 'customer_state')
-city = demografi_dan_typepayment_dan_statusorder(df_customers_dataset, 'customer_city')
+min_date = df_all["order_purchase_timestamp"].min()
+max_date = df_all["order_purchase_timestamp"].max()
+ 
+with st.sidebar:
+    # Menambahkan logo perusahaan
+    st.image("https://github.com/dicodingacademy/assets/raw/main/logo.png")
+    
+    # Mengambil start_date & end_date dari date_input
+    start_date, end_date = st.date_input(
+        label='Rentang Waktu',min_value=min_date,
+        max_value=max_date,
+        value=[min_date, max_date]
+    )
 
-# Pertanyaan 2
-top_kategori = top_kategori_produk(df_merged_category, 'product_category_name')
-bottom_kategori = bottom_kategori_produk(df_merged_category, 'product_category_name')
-
-# Pertanyaan 3
-top_produk = top_kategori_produk(df_merged_category, 'product_id')
-bottom_produk = bottom_kategori_produk (df_merged_category, 'product_id')
+df_all = df_all[(df_all["order_purchase_timestamp"] >= str(start_date)) & 
+                (df_all["order_purchase_timestamp"] <= str(end_date))]
 
 # Pertanyaan 4
-order_revenue = order_dan_revenue(df_merged_selling, 'order_purchase_timestamp')
+order_revenue = order_dan_revenue(df_all, 'order_purchase_timestamp')
+
+# Pertanyaan 1
+state = demografi_dan_typepayment_dan_statusorder(df_all, 'customer_state')
+city = demografi_dan_typepayment_dan_statusorder(df_all, 'customer_city')
+
+# Pertanyaan 2
+top_kategori = top_kategori_produk(df_all, 'product_category_name')
+bottom_kategori = bottom_kategori_produk(df_all, 'product_category_name')
+
+# Pertanyaan 3
+top_produk = top_kategori_produk(df_all, 'product_id')
+bottom_produk = bottom_kategori_produk (df_all, 'product_id')
 
 # Pertanyaan 5
-payment = demografi_dan_typepayment_dan_statusorder(df_order_payments_dataset,'payment_type')
+payment = demografi_dan_typepayment_dan_statusorder(df_all,'payment_type')
 
 # Pertanyaan 6
-seller_top = seller_5(df_merged_seller, 'seller_id', 'review_score')
-seller_nontop = seller_k5(df_merged_seller, 'seller_id', 'review_score')
-
-# Pertanyaan 7
-seller_red = seller_redflag(df_merged_seller, 'seller_id', 'review_score')
-
-# Pertanyaan 8
-status = demografi_dan_typepayment_dan_statusorder(df_orders_dataset,'order_status')
+status = demografi_dan_typepayment_dan_statusorder(df_all,'order_status')
 
 # Analisis lanjutan (RMF, Geospatial, Clustering)
 # RMF
-rmf = rmf(rmf_df, df_merged_selling, 'max_order_timestamp', 'order_purchase_timestamp')
+rmf = rmf(rmf_df, df_all, 'max_order_timestamp', 'order_purchase_timestamp')
 klaster_rmf = cluster_rmf(rmf, 'recency', 'frequency', 'monetary')
 
 # Geospatial
-states = geo_state(df_customers_dataset, 'customer_state')
-cities = geo_city(df_customers_dataset, 'customer_city')
-sao = geo_sao(df_customers_dataset, 'customer_city')
+states = geo_state(df_all, 'customer_state')
+cities = geo_city(df_all, 'customer_city')
+sao = geo_sao(df_all, 'customer_city')
 
 #cluster
-klaster = cluster(df_merged_selling, 'customer_id')
+klaster = cluster(df_all, 'customer_id')
 
 # Dasboard streamlit
 st.header('Dicoding Collection Dashboard :sparkles:')
@@ -305,21 +311,6 @@ st.write("")
 st.subheader("Type Pembayaran Yang Paling Banyak Digunakan Customer")
 payment = bar_chart(payment)
 st.pyplot(payment)
-
-st.write("")
-st.subheader("Seller Yang Mendapatkan Skor Review 5 paling banyak dan paling sedikit")
-st.write("Top Seller")
-seller_top = bar_chart(seller_top)
-st.pyplot(seller_top)
-
-st.write("Bottom Seller")
-seller_nontop = bar_chart(seller_nontop)
-st.pyplot(seller_nontop)
-
-st.write("")
-st.subheader("Seller Yang Memilki Jumlah Skor Review 1 Lebih Banyak Dibanding 5")
-seller_red = bar_chart(seller_red)
-st.pyplot(seller_red)
 
 st.write("")
 st.subheader("Status Order")
