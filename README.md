@@ -7,6 +7,7 @@ conda create -n venv_proyek_analisis_data
 conda activate venv_proyek_analisis_data
 pip install -r requirements.txt
 ```
+
 ## Setup Environment - Shell/Terminal
 ```
 mkdir 'Belajar Analisis Data Dengan Python'
@@ -30,3 +31,4 @@ streamlit run dashboard.py
 - Push ke repository GitHub
 - Hubungkan streamlit cloud dengan repository proyek GitHub
 - Deployment ke streamlit cloud
+>>>>>>> a5c400e1f66bfb0d9c10a2f3ed57568ad2c7ce41
